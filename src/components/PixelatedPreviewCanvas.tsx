@@ -127,16 +127,11 @@ const PixelatedPreviewCanvas: React.FC<PixelatedPreviewCanvasProps> = ({
   const isPanningRef = useRef(false);
   const lastPanPositionRef = useRef({ x: 0, y: 0 });
   const touchDistanceRef = useRef<number | null>(null);
-  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
   // 监听canvas尺寸变化
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
-      setCanvasSize({
-        width: canvas.width,
-        height: canvas.height,
-      });
       // 重置缩放和位置
       setTransform({
         scale: 1,

@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, ChangeEvent, DragEvent, useEffect, useMemo, useCallback } from 'react';
 import Script from 'next/script';
-import InstallPWA from '../components/InstallPWA';
 
 // 导入像素化工具和类型
 import {
@@ -25,7 +24,6 @@ import {
   colorSystemOptions, 
   convertPaletteToColorSystem, 
   getColorKeyByHex,
-  getMardToHexMapping,
   sortColorsByHue,
   ColorSystem 
 } from '../utils/colorSystemUtils';
@@ -40,18 +38,6 @@ import {
 } from '../lib/analytics';
 
 // 添加自定义动画样式
-const floatAnimation = `
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0px); }
-  }
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-`;
-
-// Helper function for sorting color keys - 保留原有实现，因为未在utils中导出
 function sortColorKeys(a: string, b: string): number {
   const regex = /^([A-Z]+)(\d+)$/;
   const matchA = a.match(regex);

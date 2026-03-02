@@ -1,6 +1,6 @@
 import { GridDownloadOptions } from '../types/downloadTypes';
 import { MappedPixel, PaletteColor } from './pixelation';
-import { getDisplayColorKey, getColorKeyByHex, ColorSystem } from './colorSystemUtils';
+import { getColorKeyByHex, ColorSystem } from './colorSystemUtils';
 
 // 用于获取对比色的工具函数
 function getContrastColor(hex: string): string {
@@ -76,7 +76,6 @@ export function exportCsvData({
 // 导出物料清单为Excel格式（CSV）
 export function exportMaterialList({
   colorCounts,
-  totalBeadCount,
   selectedColorSystem,
   excludedColorKeys
 }: {
@@ -225,10 +224,7 @@ export function importCsvData(file: File): Promise<{
 export async function downloadSimpleImage({
   mappedPixelData,
   gridDimensions,
-  colorCounts,
-  totalBeadCount,
   options,
-  activeBeadPalette,
   selectedColorSystem
 }: {
   mappedPixelData: MappedPixel[][] | null;
@@ -372,7 +368,6 @@ export async function downloadImage({
   colorCounts,
   totalBeadCount,
   options,
-  activeBeadPalette,
   selectedColorSystem
 }: {
   mappedPixelData: MappedPixel[][] | null;
