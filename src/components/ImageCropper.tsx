@@ -187,55 +187,55 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageSrc, onCropComplete, o
       setDragStart({ x, y });
     } else {
       // 调整裁切框大小
-      let newCropArea = { ...cropArea };
+      let updatedCropArea = { ...cropArea };
       
       if (activeHandle === 'tl') {
         // 左上角
         const newWidth = cropArea.width - deltaX;
         const newHeight = cropArea.height - deltaY;
         if (newWidth >= minSize && cropArea.x + deltaX >= 0) {
-          newCropArea.x = cropArea.x + deltaX;
-          newCropArea.width = newWidth;
+          updatedCropArea.x = cropArea.x + deltaX;
+          updatedCropArea.width = newWidth;
         }
         if (newHeight >= minSize && cropArea.y + deltaY >= 0) {
-          newCropArea.y = cropArea.y + deltaY;
-          newCropArea.height = newHeight;
+          updatedCropArea.y = cropArea.y + deltaY;
+          updatedCropArea.height = newHeight;
         }
       } else if (activeHandle === 'tr') {
         // 右上角
         const newWidth = cropArea.width + deltaX;
         const newHeight = cropArea.height - deltaY;
         if (newWidth >= minSize && cropArea.x + newWidth <= canvasSize.width) {
-          newCropArea.width = newWidth;
+          updatedCropArea.width = newWidth;
         }
         if (newHeight >= minSize && cropArea.y + deltaY >= 0) {
-          newCropArea.y = cropArea.y + deltaY;
-          newCropArea.height = newHeight;
+          updatedCropArea.y = cropArea.y + deltaY;
+          updatedCropArea.height = newHeight;
         }
       } else if (activeHandle === 'bl') {
         // 左下角
         const newWidth = cropArea.width - deltaX;
         const newHeight = cropArea.height + deltaY;
         if (newWidth >= minSize && cropArea.x + deltaX >= 0) {
-          newCropArea.x = cropArea.x + deltaX;
-          newCropArea.width = newWidth;
+          updatedCropArea.x = cropArea.x + deltaX;
+          updatedCropArea.width = newWidth;
         }
         if (newHeight >= minSize && cropArea.y + newHeight <= canvasSize.height) {
-          newCropArea.height = newHeight;
+          updatedCropArea.height = newHeight;
         }
       } else if (activeHandle === 'br') {
         // 右下角
         const newWidth = cropArea.width + deltaX;
         const newHeight = cropArea.height + deltaY;
         if (newWidth >= minSize && cropArea.x + newWidth <= canvasSize.width) {
-          newCropArea.width = newWidth;
+          updatedCropArea.width = newWidth;
         }
         if (newHeight >= minSize && cropArea.y + newHeight <= canvasSize.height) {
-          newCropArea.height = newHeight;
+          updatedCropArea.height = newHeight;
         }
       }
       
-      setCropArea(newCropArea);
+      setCropArea(updatedCropArea);
       setDragStart({ x, y });
     }
   };
