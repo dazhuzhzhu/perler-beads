@@ -92,6 +92,7 @@ import { TRANSPARENT_KEY, transparentColorData } from '../utils/pixelEditingUtil
 // 1. 导入新的 DonationModal 组件
 import DonationModal from '../components/DonationModal';
 import FocusModePreDownloadModal from '../components/FocusModePreDownloadModal';
+import ImageCropper from '../components/ImageCropper';
 
 export default function Home() {
   const [originalImageSrc, setOriginalImageSrc] = useState<string | null>(null);
@@ -177,6 +178,10 @@ export default function Home() {
 
   // 新增：专心拼豆模式进入前下载提醒弹窗
   const [isFocusModePreDownloadModalOpen, setIsFocusModePreDownloadModalOpen] = useState<boolean>(false);
+
+  // 新增：图片裁切相关状态
+  const [isCropping, setIsCropping] = useState<boolean>(false);
+  const [tempImageForCrop, setTempImageForCrop] = useState<string | null>(null);
 
   // 放大镜切换处理函数
   const handleToggleMagnifier = () => {
@@ -596,34 +601,49 @@ export default function Home() {
           alert(`CSV导入失败：${error.message}`);
         });
     } else {
-      // 处理图片文件
+      // 处理图片文件 - 先显示裁切界面
       trackImageUpload(file.size); // 追踪图片上传
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
-        setOriginalImageSrc(result);
-        setMappedPixelData(null);
-        setGridDimensions(null);
-        setColorCounts(null);
-        setTotalBeadCount(0);
-        setInitialGridColorKeys(new Set()); // ++ 重置初始键 ++
-        // ++ 重置横轴格子数量为默认值 ++
-        const defaultGranularity = 52;
-        setGranularity(defaultGranularity);
-        setGranularityInput(defaultGranularity.toString());
-        setRemapTrigger(prev => prev + 1); // Trigger full remap for new image
+        // 设置临时图片并进入裁切模式
+        setTempImageForCrop(result);
+        setIsCropping(true);
       };
       reader.onerror = () => {
           console.error("文件读取失败");
           alert("无法读取文件。");
-          setInitialGridColorKeys(new Set()); // ++ 重置初始键 ++
       }
       reader.readAsDataURL(file);
-      // ++ Reset manual coloring mode when a new file is processed ++
-      setIsManualColoringMode(false);
-      setSelectedColor(null);
-      setIsEraseMode(false);
     }
+  };
+
+  // 处理裁切完成
+  const handleCropComplete = (croppedImageSrc: string) => {
+    setOriginalImageSrc(croppedImageSrc);
+    setMappedPixelData(null);
+    setGridDimensions(null);
+    setColorCounts(null);
+    setTotalBeadCount(0);
+    setInitialGridColorKeys(new Set());
+    // 重置横轴格子数量为默认值
+    const defaultGranularity = 52;
+    setGranularity(defaultGranularity);
+    setGranularityInput(defaultGranularity.toString());
+    setRemapTrigger(prev => prev + 1); // Trigger full remap for new image
+    // Reset manual coloring mode
+    setIsManualColoringMode(false);
+    setSelectedColor(null);
+    setIsEraseMode(false);
+    // 关闭裁切模式
+    setIsCropping(false);
+    setTempImageForCrop(null);
+  };
+
+  // 处理取消裁切
+  const handleCropCancel = () => {
+    setIsCropping(false);
+    setTempImageForCrop(null);
   };
 
   // 处理一键擦除模式切换
@@ -2596,6 +2616,15 @@ export default function Home() {
         gridDimensions={gridDimensions}
         selectedColorSystem={selectedColorSystem}
       />
+
+      {/* 图片裁切组件 */}
+      {isCropping && tempImageForCrop && (
+        <ImageCropper
+          imageSrc={tempImageForCrop}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
+      )}
     </div>
    </>
   );
