@@ -187,55 +187,57 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageSrc, onCropComplete, o
       setDragStart({ x, y });
     } else {
       // 调整裁切框大小
-      let updatedCropArea = { ...cropArea };
-      
-      if (activeHandle === 'tl') {
-        // 左上角
-        const newWidth = cropArea.width - deltaX;
-        const newHeight = cropArea.height - deltaY;
-        if (newWidth >= minSize && cropArea.x + deltaX >= 0) {
-          updatedCropArea.x = cropArea.x + deltaX;
-          updatedCropArea.width = newWidth;
+      setCropArea(prev => {
+        const updated = { ...prev };
+        
+        if (activeHandle === 'tl') {
+          // 左上角
+          const newWidth = prev.width - deltaX;
+          const newHeight = prev.height - deltaY;
+          if (newWidth >= minSize && prev.x + deltaX >= 0) {
+            updated.x = prev.x + deltaX;
+            updated.width = newWidth;
+          }
+          if (newHeight >= minSize && prev.y + deltaY >= 0) {
+            updated.y = prev.y + deltaY;
+            updated.height = newHeight;
+          }
+        } else if (activeHandle === 'tr') {
+          // 右上角
+          const newWidth = prev.width + deltaX;
+          const newHeight = prev.height - deltaY;
+          if (newWidth >= minSize && prev.x + newWidth <= canvasSize.width) {
+            updated.width = newWidth;
+          }
+          if (newHeight >= minSize && prev.y + deltaY >= 0) {
+            updated.y = prev.y + deltaY;
+            updated.height = newHeight;
+          }
+        } else if (activeHandle === 'bl') {
+          // 左下角
+          const newWidth = prev.width - deltaX;
+          const newHeight = prev.height + deltaY;
+          if (newWidth >= minSize && prev.x + deltaX >= 0) {
+            updated.x = prev.x + deltaX;
+            updated.width = newWidth;
+          }
+          if (newHeight >= minSize && prev.y + newHeight <= canvasSize.height) {
+            updated.height = newHeight;
+          }
+        } else if (activeHandle === 'br') {
+          // 右下角
+          const newWidth = prev.width + deltaX;
+          const newHeight = prev.height + deltaY;
+          if (newWidth >= minSize && prev.x + newWidth <= canvasSize.width) {
+            updated.width = newWidth;
+          }
+          if (newHeight >= minSize && prev.y + newHeight <= canvasSize.height) {
+            updated.height = newHeight;
+          }
         }
-        if (newHeight >= minSize && cropArea.y + deltaY >= 0) {
-          updatedCropArea.y = cropArea.y + deltaY;
-          updatedCropArea.height = newHeight;
-        }
-      } else if (activeHandle === 'tr') {
-        // 右上角
-        const newWidth = cropArea.width + deltaX;
-        const newHeight = cropArea.height - deltaY;
-        if (newWidth >= minSize && cropArea.x + newWidth <= canvasSize.width) {
-          updatedCropArea.width = newWidth;
-        }
-        if (newHeight >= minSize && cropArea.y + deltaY >= 0) {
-          updatedCropArea.y = cropArea.y + deltaY;
-          updatedCropArea.height = newHeight;
-        }
-      } else if (activeHandle === 'bl') {
-        // 左下角
-        const newWidth = cropArea.width - deltaX;
-        const newHeight = cropArea.height + deltaY;
-        if (newWidth >= minSize && cropArea.x + deltaX >= 0) {
-          updatedCropArea.x = cropArea.x + deltaX;
-          updatedCropArea.width = newWidth;
-        }
-        if (newHeight >= minSize && cropArea.y + newHeight <= canvasSize.height) {
-          updatedCropArea.height = newHeight;
-        }
-      } else if (activeHandle === 'br') {
-        // 右下角
-        const newWidth = cropArea.width + deltaX;
-        const newHeight = cropArea.height + deltaY;
-        if (newWidth >= minSize && cropArea.x + newWidth <= canvasSize.width) {
-          updatedCropArea.width = newWidth;
-        }
-        if (newHeight >= minSize && cropArea.y + newHeight <= canvasSize.height) {
-          updatedCropArea.height = newHeight;
-        }
-      }
-      
-      setCropArea(updatedCropArea);
+        
+        return updated;
+      });
       setDragStart({ x, y });
     }
   };
