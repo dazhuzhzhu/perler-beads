@@ -336,7 +336,7 @@ export async function downloadSimpleImage({
   context.fillStyle = 'rgba(0, 0, 0, 0.15)';
   context.textAlign = 'center';
   context.textBaseline = 'middle';
-  context.fillText('dazhu', gridStartX + gridWidth / 2, gridStartY + gridHeight / 2);
+  context.fillText('大猪拼豆生成器', gridStartX + gridWidth / 2, gridStartY + gridHeight / 2);
 
   // 添加色号系统标识（底部右侧，更明显）
   context.font = 'bold 18px Arial';
@@ -432,7 +432,7 @@ export async function downloadImage({
   context.font = 'bold 32px Arial';
   context.textAlign = 'center';
   context.textBaseline = 'middle';
-  context.fillText('拼豆图纸生成器', downloadWidth / 2, titleBarHeight * 0.5);
+  context.fillText('大猪拼豆生成器', downloadWidth / 2, titleBarHeight * 0.5);
 
   // 绘制坐标轴（上下左右四个方向）
   const gridStartX = coordinateMargin;
@@ -550,7 +550,7 @@ export async function downloadImage({
   context.font = '14px Arial';
   context.fillStyle = 'rgba(0, 0, 0, 0.3)';
   context.textAlign = 'right';
-  context.fillText('dazhu', downloadWidth - 20, bottomY);
+  context.fillText('大猪拼豆生成器', downloadWidth - 20, bottomY);
 
   downloadCanvas.toBlob((blob) => {
     if (blob) {
